@@ -15,6 +15,7 @@
 
 package {
     default_applicable_licenses: ["Android-Apache-2.0"],
+    default_team: "trendy_team_android_printing",
 }
 
 cc_library_shared {
@@ -76,5 +77,42 @@ cc_library_shared {
         "liblog",
         "libz",
         "server_configurable_flags",
+    ],
+}
+
+cc_test {
+    name: "libwfds_ipphelper_test",
+    gtest: true,
+    cflags: [
+        "-DINCLUDE_PDF=1",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-missing-field-initializers",
+        "-Wno-format",
+        "-Wno-missing-braces",
+        "-Wno-deprecated-declarations",
+    ],
+    srcs: [
+        "ipphelper/ipphelper_test.cpp",
+        // Compile the source file directly into the test to access all JNI symbols
+        "ipphelper/ipphelper.c",
+        "ipphelper/ipp_print.c",
+        "ipphelper/ippstatus_capabilities.c",
+    ],
+    local_include_dirs: [
+        "include",
+        "ipphelper",
+        "plugins/genPCLm/inc",
+    ],
+    static_libs: [
+        "bips_aconfig_flags_cc_lib",
+        "libjpeg_static_ndk",
+    ],
+    shared_libs: [
+        "libaconfig_storage_read_api_cc",
+        "libcups",
+        "liblog",
+        "libcutils",
+        "libz",
     ],
 }
